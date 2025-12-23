@@ -58,9 +58,10 @@ namespace CA.ClinicaIA.Infra.Data.Queries
         }
 
         // --- Paciente Methods ---
-        public async Task<PacienteDto?> GetPacienteByIdAsync(int id)
+        public async Task<PacienteDto?> GetPacienteByIdAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, int id)
         {
             return await (from p in _context.Pacientes
+                          where p.ClinicaId == clinica.Id
                           where p.Id == id
                           select new PacienteDto
                           {
@@ -79,9 +80,11 @@ namespace CA.ClinicaIA.Infra.Data.Queries
                           .FirstOrDefaultAsync();
         }
 
-        public async Task<PagingResponse<PacienteDto>> GetPacientesPagedAsync(ObterPacientesRequest request)
+        public async Task<PagingResponse<PacienteDto>> GetPacientesPagedAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, ObterPacientesRequest request)
         {
             var query = _context.Pacientes.AsQueryable();
+
+            query = query.Where(p => p.ClinicaId == clinica.Id);
 
             if (!string.IsNullOrEmpty(request.Nome))
                 query = query.Where(p => p.Nome.Contains(request.Nome));
@@ -123,9 +126,10 @@ namespace CA.ClinicaIA.Infra.Data.Queries
         }
 
         // --- Procedimento Methods ---
-        public async Task<ProcedimentoDto?> GetProcedimentoByIdAsync(int id)
+        public async Task<ProcedimentoDto?> GetProcedimentoByIdAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, int id)
         {
             return await (from p in _context.Procedimentos
+                          where p.ClinicaId == clinica.Id
                           where p.Id == id
                           select new ProcedimentoDto
                           {
@@ -149,9 +153,11 @@ namespace CA.ClinicaIA.Infra.Data.Queries
                           .FirstOrDefaultAsync();
         }
 
-        public async Task<PagingResponse<ProcedimentoDto>> GetProcedimentosPagedAsync(ObterProcedimentosRequest request)
+        public async Task<PagingResponse<ProcedimentoDto>> GetProcedimentosPagedAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, ObterProcedimentosRequest request)
         {
             var query = _context.Procedimentos.AsQueryable();
+
+            query = query.Where(p => p.ClinicaId == clinica.Id);
 
             if (!string.IsNullOrEmpty(request.Nome))
                 query = query.Where(p => p.Nome.Contains(request.Nome));
@@ -195,9 +201,10 @@ namespace CA.ClinicaIA.Infra.Data.Queries
         }
 
         // --- Profissional Methods ---
-        public async Task<ProfissionalDto?> GetProfissionalByIdAsync(int id)
+        public async Task<ProfissionalDto?> GetProfissionalByIdAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, int id)
         {
             return await (from p in _context.Profissionais
+                          where p.ClinicaId == clinica.Id
                           where p.Id == id
                           select new ProfissionalDto
                           {
@@ -210,9 +217,11 @@ namespace CA.ClinicaIA.Infra.Data.Queries
                           .FirstOrDefaultAsync();
         }
 
-        public async Task<PagingResponse<ProfissionalDto>> GetProfissionaisPagedAsync(ObterProfissionaisRequest request)
+        public async Task<PagingResponse<ProfissionalDto>> GetProfissionaisPagedAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, ObterProfissionaisRequest request)
         {
             var query = _context.Profissionais.AsQueryable();
+
+            query = query.Where(p => p.ClinicaId == clinica.Id);
 
             if (!string.IsNullOrEmpty(request.Nome))
                 query = query.Where(p => p.Nome.Contains(request.Nome));
@@ -243,9 +252,10 @@ namespace CA.ClinicaIA.Infra.Data.Queries
         }
 
         // --- Plano Methods ---
-        public async Task<PlanoDto?> GetPlanoByIdAsync(int id)
+        public async Task<PlanoDto?> GetPlanoByIdAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, int id)
         {
             return await (from p in _context.Planos
+                          where p.ClinicaId == clinica.Id
                           where p.Id == id
                           select new PlanoDto
                           {
@@ -256,9 +266,11 @@ namespace CA.ClinicaIA.Infra.Data.Queries
                           .FirstOrDefaultAsync();
         }
 
-        public async Task<PagingResponse<PlanoDto>> GetPlanosPagedAsync(ObterPlanosRequest request)
+        public async Task<PagingResponse<PlanoDto>> GetPlanosPagedAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, ObterPlanosRequest request)
         {
             var query = _context.Planos.AsQueryable();
+
+            query = query.Where(p => p.ClinicaId == clinica.Id);
 
             if (!string.IsNullOrEmpty(request.Nome))
                 query = query.Where(p => p.Nome.Contains(request.Nome));

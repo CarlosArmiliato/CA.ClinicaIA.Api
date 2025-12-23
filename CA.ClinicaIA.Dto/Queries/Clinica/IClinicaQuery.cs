@@ -11,19 +11,19 @@ namespace CA.ClinicaIA.Dto.Queries.Clinica
         Task<PagingResponse<ClinicaDto>> GetClinicasPagedAsync(ObterClinicasRequest request);
 
         // Paciente Methods
-        Task<PacienteDto?> GetPacienteByIdAsync(int id);
-        Task<PagingResponse<PacienteDto>> GetPacientesPagedAsync(ObterPacientesRequest request);
+        Task<PacienteDto?> GetPacienteByIdAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, int id);
+        Task<PagingResponse<PacienteDto>> GetPacientesPagedAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, ObterPacientesRequest request);
 
         // Procedimento Methods
-        Task<ProcedimentoDto?> GetProcedimentoByIdAsync(int id);
-        Task<PagingResponse<ProcedimentoDto>> GetProcedimentosPagedAsync(ObterProcedimentosRequest request);
+        Task<ProcedimentoDto?> GetProcedimentoByIdAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, int id);
+        Task<PagingResponse<ProcedimentoDto>> GetProcedimentosPagedAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, ObterProcedimentosRequest request);
 
         // Profissional Methods
-        Task<ProfissionalDto?> GetProfissionalByIdAsync(int id);
-        Task<PagingResponse<ProfissionalDto>> GetProfissionaisPagedAsync(ObterProfissionaisRequest request);
+        Task<ProfissionalDto?> GetProfissionalByIdAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, int id);
+        Task<PagingResponse<ProfissionalDto>> GetProfissionaisPagedAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, ObterProfissionaisRequest request);
 
         // Plano Methods
-        Task<PlanoDto?> GetPlanoByIdAsync(int id);
-        Task<PagingResponse<PlanoDto>> GetPlanosPagedAsync(ObterPlanosRequest request);
+        Task<PlanoDto?> GetPlanoByIdAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, int id);
+        Task<PagingResponse<PlanoDto>> GetPlanosPagedAsync(CA.ClinicaIA.Domain.Clinicas.Clinica clinica, ObterPlanosRequest request);
     }
 }

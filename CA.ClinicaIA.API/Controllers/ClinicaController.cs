@@ -9,26 +9,31 @@ using CA.ClinicaIA.Application.Gerenciamento.Profissionais.Commands;
 using CA.ClinicaIA.Application.Gerenciamento.Procedimentos.Commands;
 using CA.ClinicaIA.Dto.Pagination;
 
+using CA.ClinicaIA.Domain.Repositories;
+
 namespace CA.ClinicaIA.API.Controllers
 {
     [ApiController]
-    [Route("api/clinica")]
+    [Route("api/clinica/{clinicaId}")]
     public class ClinicaController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IClinicaQuery _clinicaQuery;
+        private readonly IClinicaRepository _clinicaRepository;
 
-        public ClinicaController(IMediator mediator, IClinicaQuery clinicaQuery)
+        public ClinicaController(IMediator mediator, IClinicaQuery clinicaQuery, IClinicaRepository clinicaRepository)
         {
             _mediator = mediator;
             _clinicaQuery = clinicaQuery;
+            _clinicaRepository = clinicaRepository;
         }
 
         #region Paciente
         [HttpPost("pacientes")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public async Task<IActionResult> CreatePaciente([FromBody] SalvarPacienteCommand command)
+        public async Task<IActionResult> CreatePaciente(int clinicaId, [FromBody] SalvarPacienteCommand command)
         {
+            command.ClinicaId = clinicaId;
             var result = await _mediator.Send(command);
 
             return Ok(result);
@@ -37,8 +42,9 @@ namespace CA.ClinicaIA.API.Controllers
         [HttpPut("pacientes/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(int))]
-        public async Task<IActionResult> UpdatePacienteById(int id, [FromBody] SalvarPacienteCommand command)
+        public async Task<IActionResult> UpdatePacienteById(int clinicaId, int id, [FromBody] SalvarPacienteCommand command)
         {
+            command.ClinicaId = clinicaId;
             command.Id = id;
             var result = await _mediator.Send(command);
 
@@ -48,18 +54,25 @@ namespace CA.ClinicaIA.API.Controllers
         [HttpGet("pacientes/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PacienteDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(PacienteDto))]
-        public async Task<IActionResult> GetPacienteById(int id)
+        public async Task<IActionResult> GetPacienteById(int clinicaId, int id)
         {
-            var paciente = await _clinicaQuery.GetPacienteByIdAsync(id);
+            var clinica = await _clinicaRepository.GetClinicaByIdAsync(clinicaId);
+            if (clinica == null) return NotFound("Clinica não encontrada");
+
+            var paciente = await _clinicaQuery.GetPacienteByIdAsync(clinica, id);
 
             return Ok(paciente);
         }
 
         [HttpGet("pacientes")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagingResponse<PacienteDto>))]
-        public async Task<IActionResult> GetAllPacientes([FromQuery] ObterPacientesRequest request)
+        public async Task<IActionResult> GetAllPacientes(int clinicaId, [FromQuery] ObterPacientesRequest request)
         {
-            var paciente = await _clinicaQuery.GetPacientesPagedAsync(request);
+            var clinica = await _clinicaRepository.GetClinicaByIdAsync(clinicaId);
+            if (clinica == null) return NotFound("Clinica não encontrada");
+
+            request.ClinicaId = clinicaId;
+            var paciente = await _clinicaQuery.GetPacientesPagedAsync(clinica, request);
 
             return Ok(paciente);
         }
@@ -68,8 +81,9 @@ namespace CA.ClinicaIA.API.Controllers
         #region Plano
         [HttpPost("planos")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public async Task<IActionResult> CreatePlano([FromBody] SalvarPlanoCommand command)
+        public async Task<IActionResult> CreatePlano(int clinicaId, [FromBody] SalvarPlanoCommand command)
         {
+            command.ClinicaId = clinicaId;
             var result = await _mediator.Send(command);
 
             return Ok(result);
@@ -78,8 +92,9 @@ namespace CA.ClinicaIA.API.Controllers
         [HttpPut("planos/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(int))]
-        public async Task<IActionResult> UpdatePlanoById(int id, [FromBody] SalvarPlanoCommand command)
+        public async Task<IActionResult> UpdatePlanoById(int clinicaId, int id, [FromBody] SalvarPlanoCommand command)
         {
+            command.ClinicaId = clinicaId;
             command.Id = id;
             var result = await _mediator.Send(command);
 
@@ -89,18 +104,24 @@ namespace CA.ClinicaIA.API.Controllers
         [HttpGet("planos/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PlanoDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(PlanoDto))]
-        public async Task<IActionResult> GetPlanoById(int id)
+        public async Task<IActionResult> GetPlanoById(int clinicaId, int id)
         {
-            var plano = await _clinicaQuery.GetPlanoByIdAsync(id);
+            var clinica = await _clinicaRepository.GetClinicaByIdAsync(clinicaId);
+            if (clinica == null) return NotFound("Clinica não encontrada");
+
+            var plano = await _clinicaQuery.GetPlanoByIdAsync(clinica, id);
 
             return Ok(plano);
         }
 
         [HttpGet("planos")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagingResponse<PlanoDto>))]
-        public async Task<IActionResult> GetAllPlanos([FromQuery] ObterPlanosRequest request)
+        public async Task<IActionResult> GetAllPlanos(int clinicaId, [FromQuery] ObterPlanosRequest request)
         {
-            var planos = await _clinicaQuery.GetPlanosPagedAsync(request);
+            var clinica = await _clinicaRepository.GetClinicaByIdAsync(clinicaId);
+            if (clinica == null) return NotFound("Clinica não encontrada");
+
+            var planos = await _clinicaQuery.GetPlanosPagedAsync(clinica, request);
 
             return Ok(planos);
         }
@@ -109,8 +130,9 @@ namespace CA.ClinicaIA.API.Controllers
         #region Profissional
         [HttpPost("profissionais")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public async Task<IActionResult> CreateProfissional([FromBody] SalvarProfissionalCommand command)
+        public async Task<IActionResult> CreateProfissional(int clinicaId, [FromBody] SalvarProfissionalCommand command)
         {
+            command.ClinicaId = clinicaId;
             var result = await _mediator.Send(command);
 
             return Ok(result);
@@ -119,8 +141,9 @@ namespace CA.ClinicaIA.API.Controllers
         [HttpPut("profissionais/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(int))]
-        public async Task<IActionResult> UpdateProfissionalById(int id, [FromBody] SalvarProfissionalCommand command)
+        public async Task<IActionResult> UpdateProfissionalById(int clinicaId, int id, [FromBody] SalvarProfissionalCommand command)
         {
+            command.ClinicaId = clinicaId;
             command.Id = id;
             var result = await _mediator.Send(command);
 
@@ -130,18 +153,25 @@ namespace CA.ClinicaIA.API.Controllers
         [HttpGet("profissionais/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProfissionalDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProfissionalDto))]
-        public async Task<IActionResult> GetProfissionalById(int id)
+        public async Task<IActionResult> GetProfissionalById(int clinicaId, int id)
         {
-            var profissional = await _clinicaQuery.GetProfissionalByIdAsync(id);
+            var clinica = await _clinicaRepository.GetClinicaByIdAsync(clinicaId);
+            if (clinica == null) return NotFound("Clinica não encontrada");
+
+            var profissional = await _clinicaQuery.GetProfissionalByIdAsync(clinica, id);
 
             return Ok(profissional);
         }
 
         [HttpGet("profissionais")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagingResponse<ProfissionalDto>))]
-        public async Task<IActionResult> GetAllProfissionais([FromQuery] ObterProfissionaisRequest request)
+        public async Task<IActionResult> GetAllProfissionais(int clinicaId, [FromQuery] ObterProfissionaisRequest request)
         {
-            var profissionais = await _clinicaQuery.GetProfissionaisPagedAsync(request);
+            var clinica = await _clinicaRepository.GetClinicaByIdAsync(clinicaId);
+            if (clinica == null) return NotFound("Clinica não encontrada");
+
+            request.ClinicaId = clinicaId;
+            var profissionais = await _clinicaQuery.GetProfissionaisPagedAsync(clinica, request);
 
             return Ok(profissionais);
         }
@@ -150,8 +180,9 @@ namespace CA.ClinicaIA.API.Controllers
         #region Procedimento
         [HttpPost("procedimentos")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-        public async Task<IActionResult> CreateProcedimento([FromBody] SalvarProcedimentoCommand command)
+        public async Task<IActionResult> CreateProcedimento(int clinicaId, [FromBody] SalvarProcedimentoCommand command)
         {
+            command.ClinicaId = clinicaId;
             var result = await _mediator.Send(command);
 
             return Ok(result);
@@ -160,8 +191,9 @@ namespace CA.ClinicaIA.API.Controllers
         [HttpPut("procedimentos/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(int))]
-        public async Task<IActionResult> UpdateProcedimentoById(int id, [FromBody] SalvarProcedimentoCommand command)
+        public async Task<IActionResult> UpdateProcedimentoById(int clinicaId, int id, [FromBody] SalvarProcedimentoCommand command)
         {
+            command.ClinicaId = clinicaId;
             command.Id = id;
             var result = await _mediator.Send(command);
 
@@ -171,18 +203,25 @@ namespace CA.ClinicaIA.API.Controllers
         [HttpGet("procedimentos/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProcedimentoDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProcedimentoDto))]
-        public async Task<IActionResult> GetProcedimentoById(int id)
+        public async Task<IActionResult> GetProcedimentoById(int clinicaId, int id)
         {
-            var procedimento = await _clinicaQuery.GetProcedimentoByIdAsync(id);
+            var clinica = await _clinicaRepository.GetClinicaByIdAsync(clinicaId);
+            if (clinica == null) return NotFound("Clinica não encontrada");
+
+            var procedimento = await _clinicaQuery.GetProcedimentoByIdAsync(clinica, id);
 
             return Ok(procedimento);
         }
 
         [HttpGet("procedimentos")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagingResponse<ProcedimentoDto>))]
-        public async Task<IActionResult> GetAllProcedimentos([FromQuery] ObterProcedimentosRequest request)
+        public async Task<IActionResult> GetAllProcedimentos(int clinicaId, [FromQuery] ObterProcedimentosRequest request)
         {
-            var procedimentos = await _clinicaQuery.GetProcedimentosPagedAsync(request);
+            var clinica = await _clinicaRepository.GetClinicaByIdAsync(clinicaId);
+            if (clinica == null) return NotFound("Clinica não encontrada");
+
+            request.ClinicaId = clinicaId;
+            var procedimentos = await _clinicaQuery.GetProcedimentosPagedAsync(clinica, request);
 
             return Ok(procedimentos);
         }
