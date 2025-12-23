@@ -17,5 +17,11 @@ namespace CA.ClinicaIA.Domain.Clinicas
         {
             Id = id;
         }
+
+        public void Alterar(string nome, bool intercambio)
+        {
+            Nome = nome;
+            Intercambio = intercambio;
+        }
     }
 }

@@ -36,8 +36,7 @@ namespace CA.ClinicaIA.Application.Gerenciamento.Planos.Handlers
                 if (plano == null)
                     throw new Exception("Plano não encontrado");
 
-                plano = new Plano(
-                    request.Id,
+                plano.Alterar(
                     request.Nome,
                     request.Intercambio);
             }

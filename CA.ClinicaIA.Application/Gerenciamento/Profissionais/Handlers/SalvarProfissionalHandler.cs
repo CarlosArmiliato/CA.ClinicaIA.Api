@@ -37,8 +37,7 @@ namespace CA.ClinicaIA.Application.Gerenciamento.Profissionais.Handlers
                 if (profissional == null)
                     throw new Exception("Profissional não encontrado");
 
-                profissional = new Profissional(
-                    request.Id,
+                profissional.Alterar(
                     request.Nome,
                     request.Email,
                     request.GoogleAccountId);

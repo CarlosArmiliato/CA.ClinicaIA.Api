@@ -23,5 +23,12 @@ namespace CA.ClinicaIA.Domain.Clinicas
         {
             Id = id;
         }
+
+        public void Alterar(string nome, string email, string? googleAccountId)
+        {
+            Nome = nome;
+            Email = email;
+            GoogleAccountId = googleAccountId;
+        }
     }
 }

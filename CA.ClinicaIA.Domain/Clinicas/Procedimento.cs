@@ -21,5 +21,10 @@ namespace CA.ClinicaIA.Domain.Clinicas
             Id = id;
             ProcedimentoPlanos = procedimentoPlanos;
         }
+
+        public void Alterar(string nome)
+        {
+            Nome = nome;
+        }
     }
 }

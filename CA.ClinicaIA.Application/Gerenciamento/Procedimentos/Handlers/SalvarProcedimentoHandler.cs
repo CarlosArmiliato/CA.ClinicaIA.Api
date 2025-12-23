@@ -34,10 +34,7 @@ namespace CA.ClinicaIA.Application.Gerenciamento.Procedimentos.Handlers
                 if (procedimento == null)
                     throw new Exception("Procedimento não encontrado");
 
-                procedimento = new Procedimento(
-                    request.Id,
-                    request.Nome,
-                    procedimento.ProcedimentoPlanos);
+                procedimento.Alterar(request.Nome);
             }
 
             var id = await _repository.SalvarProcedimentoAsync(clinica, procedimento);
