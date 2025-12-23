@@ -21,5 +21,9 @@ namespace CA.ClinicaIA.Dto.Queries.Clinica
         // Profissional Methods
         Task<ProfissionalDto?> GetProfissionalByIdAsync(int id);
         Task<PagingResponse<ProfissionalDto>> GetProfissionaisPagedAsync(ObterProfissionaisRequest request);
+
+        // Plano Methods
+        Task<PlanoDto?> GetPlanoByIdAsync(int id);
+        Task<PagingResponse<PlanoDto>> GetPlanosPagedAsync(ObterPlanosRequest request);
     }
 }

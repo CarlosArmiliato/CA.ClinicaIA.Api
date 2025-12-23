@@ -13,15 +13,15 @@ namespace CA.ClinicaIA.Domain.Repositories
         Task<Paciente?> GetPacienteByIdAsync(Clinica clinica, int id);
 
         // Procedimento Methods
-        Task SalvarProcedimentoAsync(Clinica clinica, Procedimento procedimento);
+        Task<int> SalvarProcedimentoAsync(Clinica clinica, Procedimento procedimento);
         Task<Procedimento?> GetProcedimentoByIdAsync(Clinica clinica, int id);
 
         // Profissional Methods
-        Task SalvarProfissionalAsync(Clinica clinica, Profissional profissional);
+        Task<int> SalvarProfissionalAsync(Clinica clinica, Profissional profissional);
         Task<Profissional?> GetProfissionalByIdAsync(Clinica clinica, int id);
 
         // Plano Methods
-        Task SalvarPlanoAsync(Clinica clinica, Plano plano);
+        Task<int> SalvarPlanoAsync(Clinica clinica, Plano plano);
         Task<Plano?> GetPlanoByIdAsync(Clinica clinica, int id);
     }
 }

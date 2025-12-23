@@ -120,27 +120,30 @@ namespace CA.ClinicaIA.Infra.Data.Repositories
         #endregion
 
         #region Procedimentos
-        public async Task SalvarProcedimentoAsync(Clinica clinica, Procedimento procedimento)
+        public async Task<int> SalvarProcedimentoAsync(Clinica clinica, Procedimento procedimento)
         {
+            ProcedimentoTable? table;
             if (procedimento.Id == 0)
             {
-                var table = new ProcedimentoTable
+                table = new ProcedimentoTable
                 {
                     ClinicaId = clinica.Id,
                     Nome = procedimento.Nome,
+                    CreatedAt = DateTimeOffset.Now
                 };
                 await _context.Procedimentos.AddAsync(table);
             }
             else
             {
-                var table = await _context.Procedimentos.FindAsync(procedimento.Id);
+                table = await _context.Procedimentos.FindAsync(procedimento.Id);
                 if (table != null)
                 {
                     table.Nome = procedimento.Nome;
-                    table.UpdatedAt = System.DateTime.UtcNow;
+                    table.UpdatedAt = DateTimeOffset.Now;
                 }
             }
             await _context.SaveChangesAsync();
+            return table?.Id ?? 0;
         }
 
         public async Task<Procedimento?> GetProcedimentoByIdAsync(Clinica clinica, int id)
@@ -162,31 +165,34 @@ namespace CA.ClinicaIA.Infra.Data.Repositories
         #endregion
 
         #region Profissional
-        public async Task SalvarProfissionalAsync(Clinica clinica, Profissional profissional)
+        public async Task<int> SalvarProfissionalAsync(Clinica clinica, Profissional profissional)
         {
+            ProfissionalTable? table;
             if (profissional.Id == 0)
             {
-                var table = new ProfissionalTable
+                table = new ProfissionalTable
                 {
                     ClinicaId = clinica.Id,
                     Nome = profissional.Nome,
                     Email = profissional.Email,
                     GoogleAccountId = profissional.GoogleAccountId,
+                    CreatedAt = DateTimeOffset.Now
                 };
                 await _context.Profissionais.AddAsync(table);
             }
             else
             {
-                var table = await _context.Profissionais.FindAsync(profissional.Id);
+                table = await _context.Profissionais.FindAsync(profissional.Id);
                 if (table != null)
                 {
                     table.Nome = profissional.Nome;
                     table.Email = profissional.Email;
                     table.GoogleAccountId = profissional.GoogleAccountId;
-                    table.UpdatedAt = System.DateTime.UtcNow;
+                    table.UpdatedAt = DateTimeOffset.Now;
                 }
             }
             await _context.SaveChangesAsync();
+            return table?.Id ?? 0;
         }
 
         public async Task<Profissional?> GetProfissionalByIdAsync(Clinica clinica, int id)
@@ -201,29 +207,32 @@ namespace CA.ClinicaIA.Infra.Data.Repositories
         #endregion
 
         #region Plano
-        public async Task SalvarPlanoAsync(Clinica clinica, Plano entity)
+        public async Task<int> SalvarPlanoAsync(Clinica clinica, Plano entity)
         {
+            PlanoTable? table;
             if (entity.Id == 0)
             {
-                var table = new PlanoTable
+                table = new PlanoTable
                 {
                     ClinicaId = clinica.Id,
                     Nome = entity.Nome,
-                    Intercambio = entity.Intercambio
+                    Intercambio = entity.Intercambio,
+                    CreatedAt = DateTimeOffset.Now
                 };
                 await _context.Planos.AddAsync(table);
             }
             else
             {
-                var table = await _context.Planos.FindAsync(entity.Id);
+                table = await _context.Planos.FindAsync(entity.Id);
                 if (table != null)
                 {
                     table.Nome = entity.Nome;
                     table.Intercambio = entity.Intercambio;
-                    table.UpdatedAt = System.DateTime.UtcNow;
+                    table.UpdatedAt = DateTimeOffset.Now;
                 }
             }
             await _context.SaveChangesAsync();
+            return table?.Id ?? 0;
         }
 
         public async Task<Plano?> GetPlanoByIdAsync(Clinica clinica, int id)

@@ -241,5 +241,48 @@ namespace CA.ClinicaIA.Infra.Data.Queries
                 Data = data
             };
         }
+
+        // --- Plano Methods ---
+        public async Task<PlanoDto?> GetPlanoByIdAsync(int id)
+        {
+            return await (from p in _context.Planos
+                          where p.Id == id
+                          select new PlanoDto
+                          {
+                              Id = p.Id,
+                              Nome = p.Nome,
+                              Intercambio = p.Intercambio
+                          })
+                          .FirstOrDefaultAsync();
+        }
+
+        public async Task<PagingResponse<PlanoDto>> GetPlanosPagedAsync(ObterPlanosRequest request)
+        {
+            var query = _context.Planos.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Nome))
+                query = query.Where(p => p.Nome.Contains(request.Nome));
+
+            var total = await query.CountAsync();
+
+            var data = await query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(p => new PlanoDto
+                {
+                    Id = p.Id,
+                    Nome = p.Nome,
+                    Intercambio = p.Intercambio
+                })
+                .ToListAsync();
+
+            return new PagingResponse<PlanoDto>
+            {
+                Page = request.Page,
+                PageSize = request.PageSize,
+                TotalRecords = total,
+                Data = data
+            };
+        }
     }
 }
