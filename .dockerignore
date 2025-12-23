@@ -1,0 +1,12 @@
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/Dockerfile*
+**/.dockerignore
+**/docker-compose*
+**/*.md
+**/.editorconfig
+**/dotnet-tools.json
