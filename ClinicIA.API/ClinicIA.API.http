@@ -1,0 +1,37 @@
+@ClinicIA.API_HostAddress = http://localhost:5037
+
+GET {{ClinicIA.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{ClinicIA.API_HostAddress}}/api/paciente
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "dataNascimento": "1990-01-01T00:00:00Z",
+  "cpf": "12345678900",
+  "carteirinhaConvenio": "XYZ123",
+  "clinicaId": 1
+}
+
+###
+
+POST {{ClinicIA.API_HostAddress}}/api/agendamento
+Content-Type: application/json
+
+{
+  "data": "2025-12-10T10:00:00Z",
+  "tipo": 1,
+  "profissionalId": 1,
+  "pacienteId": 1,
+  "procedimentoId": 1
+}
+
+###
+
+GET {{ClinicIA.API_HostAddress}}/api/agendamento?data=2025-12-10
+Accept: application/json
+
+###
