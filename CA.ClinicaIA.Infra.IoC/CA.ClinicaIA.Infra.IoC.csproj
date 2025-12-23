@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CA.ClinicaIA.Application\CA.ClinicaIA.Application.csproj" />
+    <ProjectReference Include="..\CA.ClinicaIA.Infra.Data\CA.ClinicaIA.Infra.Data.csproj" />
+    <ProjectReference Include="..\CA.ClinicaIA.Infra.Services\CA.ClinicaIA.Infra.Services.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
